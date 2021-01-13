@@ -1,7 +1,7 @@
 
 export class Classifier {
     constructor() {
-        this.nn = new neuralNetwork({
+        this.nn = new ml5.neuralNetwork({
             input: 63,
             output: 10,
             task: 'classification',
