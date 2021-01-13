@@ -1,41 +1,38 @@
 import 'regenerator-runtime/runtime'
 // import trainData from '../data/*.json'
 import {Classifier} from "./Classifier";
+import {uiManager} from "./UiManager";
+import {Handpose} from "./Handpose";
 
 let handsPose = [];
 let handInView = false;
 let brain;
 let video;
-let resultEl;
 
 const setup = async () => {
-    createCanvas(640, 480);
+    createCanvas(640, 480).parent('canvas-wrapper');
     video = createCapture(VIDEO);
-    console.log(video)
     video.hide();
-    resultEl = document.querySelector('#predictions')
-    const handpose = ml5.handpose(video, () => console.log("handpose loaded"));
 
-    handpose.on("predict", results => {
+    const handpose = new Handpose(video);
+    await handpose.load()
+    handpose.onPrediction((results) => {
         handInView = results.length > 0
         if (handInView) handsPose = results
-    });
+    })
+    console.log('Handpose loaded');
 
     brain = new Classifier()
     await brain.load()
-    // for (const [y, xs] of Object.entries(trainData)) {
-    //     xs.forEach(x => brain.addData(x, y))
-    // }
+    console.log('Model loaded');
+
+    uiManager.hideLoader()
 
     setInterval(async () => {
-        if (handInView){
+        if (handInView) {
             const r = await brain.classify(getInput())
-            const t = r.map(a => `<p>${a.label} : ${a.confidence}</p>`).join('\n')
-
-            resultEl.innerHTML = t;
+            uiManager.showPredictions(r)
         }
-
-
     }, 200)
 }
 
@@ -76,9 +73,6 @@ async function keyPressed() {
         ].join('\n')
         console.log(r)
         collected = []
-    } else if (key === '+') {
-        await brain.train()
-        console.log('trained')
     } else if (key === 'p') {
         const r = await brain.classify(getInput())
         console.log(r);

@@ -7,12 +7,9 @@ export class Classifier {
             task: 'classification',
             debug: true
         });
-        console.log('aaaa');
-
     }
 
     addData(x, y) {
-        console.log('e');
         this.nn.addData(x, [y])
     }
 
