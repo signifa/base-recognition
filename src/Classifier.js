@@ -1,22 +1,25 @@
 import {neuralNetwork} from 'ml5'
 
-export class Classifier extends neuralNetwork {
+export class Classifier {
     constructor() {
-        super({
+        this.nn = new neuralNetwork({
             input: 63,
             output: 10,
             task: 'classification',
             debug: true
         });
+        console.log('aaaa');
+
     }
 
     addData(x, y) {
-        super.addData(x, [y])
+        console.log('e');
+        this.nn.addData(x, [y])
     }
 
     load() {
         return new Promise((resolve, reject) => {
-            super.load(
+            this.nn.load(
                 {
                     model: 'model/model.json',
                     metadata: 'model/model_meta.json',
@@ -27,7 +30,14 @@ export class Classifier extends neuralNetwork {
         });
     }
 
+    train(){
+        return new Promise((resolve, reject) => {
+            this.nn.normalizeData()
+            this.nn.train({epochs: 100}, (e) => e ? reject(e) : resolve());
+        });
+    }
+
     classify(input) {
-        return new Promise((resolve, reject) => super.classify(input, (e, r) => e ? reject(e) : resolve(r)));
+        return new Promise((resolve, reject) => this.nn.classify(input, (e, r) => e ? reject(e) : resolve(r)));
     }
 }

@@ -1,17 +1,20 @@
 import 'regenerator-runtime/runtime'
 import trainData from '../data/*.json'
 import ml5 from 'ml5';
+import {Classifier} from "./Classifier";
 
 let handsPose = [];
 let handInView = false;
 let brain;
 let video;
+let resultEl;
 
 const setup = async () => {
     createCanvas(640, 480);
     video = createCapture(VIDEO);
+    console.log(video)
     video.hide();
-
+    resultEl = document.querySelector('#predictions')
     const handpose = ml5.handpose(video, () => console.log("handpose loaded"));
 
     handpose.on("predict", results => {
@@ -19,16 +22,22 @@ const setup = async () => {
         if (handInView) handsPose = results
     });
 
-    brain = new ml5.neuralNetwork({
-        intput: 63,
-        output: 10,
-        task: 'classification',
-        debug: true
-    });
+    brain = new Classifier()
+    await brain.load()
+    // for (const [y, xs] of Object.entries(trainData)) {
+    //     xs.forEach(x => brain.addData(x, y))
+    // }
 
-    for (const [y, xs] of Object.entries(trainData)) {
-        xs.forEach(x => brain.addData(x, [y]))
-    }
+    setInterval(async () => {
+        if (handInView){
+            const r = await brain.classify(getInput())
+            const t = r.map(a => `<p>${a.label} : ${a.confidence}</p>`).join('\n')
+
+            resultEl.innerHTML = t;
+        }
+
+
+    }, 200)
 }
 
 function getInput() {
@@ -56,7 +65,7 @@ const draw = async () => {
 
 let collected = []
 
-function keyPressed() {
+async function keyPressed() {
     if (key === '*') {
         collected.push(getInput());
         console.log('collected');
@@ -69,12 +78,11 @@ function keyPressed() {
         console.log(r)
         collected = []
     } else if (key === '+') {
-        brain.normalizeData()
-        brain.train({epochs: 100}, () => {
-            console.log('trained')
-        })
+        await brain.train()
+        console.log('trained')
     } else if (key === 'p') {
-        brain.classify(getInput(), (e, r) => console.log(r[0]))
+        const r = await brain.classify(getInput())
+        console.log(r);
     } else if (key === 'e') {
         brain.save();
     }

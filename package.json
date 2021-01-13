@@ -7,6 +7,10 @@
     "dev": "parcel public/index.html --out-dir dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "staticFiles": {
+    "staticPath": "static",
+    "watcherGlob": "**"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
