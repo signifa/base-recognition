@@ -1,6 +1,5 @@
 import 'regenerator-runtime/runtime'
-import trainData from '../data/*.json'
-import ml5 from 'ml5';
+// import trainData from '../data/*.json'
 import {Classifier} from "./Classifier";
 
 let handsPose = [];

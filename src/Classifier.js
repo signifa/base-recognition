@@ -1,4 +1,3 @@
-import {neuralNetwork} from 'ml5'
 
 export class Classifier {
     constructor() {
