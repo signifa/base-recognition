@@ -3,6 +3,7 @@ import 'regenerator-runtime/runtime'
 import {Classifier} from "./Classifier";
 import {uiManager} from "./UiManager";
 import {Handpose} from "./Handpose";
+import trainData from '../data/*.json'
 
 let handsPose = [];
 let handInView = false;
@@ -76,8 +77,12 @@ async function keyPressed() {
     } else if (key === 'p') {
         const r = await brain.classify(getInput())
         console.log(r);
-    } else if (key === 'e') {
-        brain.save();
+    } else if (key === 't') {
+        const newBrain = new Classifier();
+
+        Object.entries(trainData).forEach(([y, xs]) => xs.forEach(x => newBrain.addData(x, y)))
+        await newBrain.train()
+        newBrain.save();
     }
 }
 
