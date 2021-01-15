@@ -5,17 +5,21 @@
   "main": "index.js",
   "scripts": {
     "dev": "parcel public/index.html --out-dir dev",
+    "build": "parcel build public/index.html --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "staticFiles": {
+    "staticPath": "static",
+    "watcherGlob": "**"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "ml5": "^0.6.0",
-    "p5": "^1.1.9"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "less": "^4.1.0",
     "parcel-bundler": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.5.0",
     "typescript": "^4.0.5"
   }
 }
