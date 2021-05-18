@@ -1,8 +1,6 @@
 # Signifa - ASL number recognition app
 
-<p align="center">
-    [![demo gif](./.github/demo.gif)](https://signifa-ctmsst.vercel.app/)
-</p>
+[![demo gif](./.github/demo.gif)](https://signifa-ctmsst.vercel.app/)
 
 [Try it live!](https://signifa-ctmsst.vercel.app/)
 ## Techno used
