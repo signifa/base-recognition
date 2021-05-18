@@ -7,6 +7,7 @@
 
 * **p5** to draw stuff
 * **ml5** to classify stuff
+* **milligram** to style stuff 
 * **typescript** & **less** for more syntactic sugar
 * **parcel** to bundle the app
 
